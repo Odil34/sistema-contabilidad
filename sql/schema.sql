@@ -1,18 +1,6 @@
-/* ============================================================================
-   Sistema de Contabilidad - schema.sql
-   Día 1: creación de las tablas núcleo de la contabilidad.
-   ----------------------------------------------------------------------------
-   CÓMO EJECUTARLO EN SQL SERVER (SSMS):
-   1. En la barra superior de SSMS, selecciona en el desplegable tu base de datos
-      (la que ya creaste). Así el script se ejecuta dentro de ella.
-   2. Pega este contenido en una ventana de consulta y ejecuta (F5).
-
-   Si prefieres que el script use la base por nombre, descomenta la línea USE de
-   abajo y cambia el nombre por el de tu base de datos.
-   ============================================================================ */
-
--- USE [SistemaContableBD];
--- GO
+-- SISTEMA CONTABLE BD
+ USE Sistema_ContableDB;
+ GO
 
 /* ---------- Catálogo de cuentas ----------
    El primer dígito del código define la clasificación contable:

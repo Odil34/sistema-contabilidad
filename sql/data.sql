@@ -1,12 +1,10 @@
-/* ============================================================================
-   Sistema de Contabilidad - data.sql
-   Día 1: carga del catálogo de cuentas (según "Cuentas conta.xlsx").
-   ----------------------------------------------------------------------------
-   Ejecútalo DESPUÉS de schema.sql, con tu base de datos seleccionada en SSMS.
-   ============================================================================ */
 
--- USE [SistemaContableBD];
--- GO
+  -- Sistema de Contabilidad - data.sql
+  -- carga del catálogo de cuentas
+
+
+ USE Sistema_ContableDB;
+ GO
 
 IF NOT EXISTS (SELECT 1 FROM dbo.Cuentas)
 INSERT INTO dbo.Cuentas (Codigo, Nombre, CodigoPadre, Tipo, Naturaleza, EsDetalle) VALUES
@@ -51,4 +49,4 @@ INSERT INTO dbo.Cuentas (Codigo, Nombre, CodigoPadre, Tipo, Naturaleza, EsDetall
 GO
 
 -- Consulta de verificación (opcional):
--- SELECT Tipo, COUNT(*) AS Cuentas FROM dbo.Cuentas GROUP BY Tipo ORDER BY Tipo;
+SELECT Tipo, COUNT(*) AS Cuentas FROM dbo.Cuentas GROUP BY Tipo ORDER BY Tipo;
