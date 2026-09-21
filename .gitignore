@@ -1,0 +1,12 @@
+# ---- Compilación .NET ----
+bin/
+obj/
+publish/
+*.user
+
+# ---- Visual Studio ----
+.vs/
+*.suo
+
+# ---- Temporales ----
+*.log
