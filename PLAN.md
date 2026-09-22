@@ -6,10 +6,14 @@ Proyecto en C# (Windows Forms, MDI) con base de datos SQL Server.
 ## Avance por días
 
 - [x] **Día 1 (lun 21/09):** Base de datos — script SQL con tablas núcleo (`Cuentas`, `Asientos`, `AsientoDetalle`) y catálogo de cuentas.
-- [ ] **Día 2 (mar 22/09):** Capa de datos (conexión + DAL), **ventana principal MDI tipo dashboard** (con indicadores para que no se vea vacía) y formulario de Catálogo de Cuentas.
+- [x] **Día 2 (mar 22/09):** Capa de datos (conexión + DAL), **ventana principal MDI tipo dashboard** (con indicadores para que no se vea vacía) y formulario de Catálogo de Cuentas.
 - [ ] **Día 3 (mié 23/09):** Libro Diario (partida doble), Mayorización (Libro Mayor), Balanza, Estados financieros (Balance y Resultados), Liquidación de IVA, Login + roles/usuarios, módulo de Salud Financiera, README y ejecutable.
 
-> Nota: si hoy avanzamos rápido, adelantamos parte del Día 3 (Libro Diario / Mayor) para dejar el miércoles más liviano.
+## Notas de la profesora (para tener en cuenta)
+
+- El sistema debe calcular el **inventario final automáticamente** y colocarlo en el **Balance General**.
+- En el catálogo, dejar los **costos y gastos en un solo grupo** (dígito 4). Ya aplicado.
+- En la demostración en vivo dará un ejercicio para deducir y registrar los asientos correctamente.
 
 ## Requisitos del proyecto
 

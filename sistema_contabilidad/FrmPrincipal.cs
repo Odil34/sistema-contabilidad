@@ -2,7 +2,6 @@ using sistema_contabilidad.Formularios;
 
 namespace sistema_contabilidad
 {
-
     public partial class FrmPrincipal : Form
     {
         public FrmPrincipal()
@@ -14,12 +13,9 @@ namespace sistema_contabilidad
         {
             lblEstado.Text = "Base de datos: " + Datos.ConexionBD.NombreBaseDatos + "  |  Conectado";
             lblFecha.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
-
-
             AbrirHijo<FrmDashboard>();
         }
 
-      
         private void AbrirHijo<T>() where T : Form, new()
         {
             foreach (Form abierto in MdiChildren)
@@ -39,6 +35,10 @@ namespace sistema_contabilidad
         }
 
         private void menuCatalogoCuentas_Click(object sender, EventArgs e) => AbrirHijo<FrmCatalogo>();
+
+        private void menuLibroDiario_Click(object sender, EventArgs e) => AbrirHijo<FrmLibroDiario>();
+
+        private void menuLibroMayor_Click(object sender, EventArgs e) => AbrirHijo<FrmLibroMayor>();
 
         private void menuDashboard_Click(object sender, EventArgs e) => AbrirHijo<FrmDashboard>();
 
