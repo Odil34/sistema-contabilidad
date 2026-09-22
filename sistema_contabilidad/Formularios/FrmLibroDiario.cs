@@ -18,9 +18,16 @@ namespace sistema_contabilidad.Formularios
 
         private void FrmLibroDiario_Load(object sender, EventArgs e)
         {
+            cboCuenta.DisplayMember = "DescripcionSeleccion";
             cboCuenta.DataSource = _cuentaDAL.ListarDetalle();
             PrepararGrilla();
             NuevoAsiento();
+        }
+
+        private void btnCalcIva_Click(object sender, EventArgs e)
+        {
+            using var calc = new FrmCalculadoraIva();
+            calc.ShowDialog(this);
         }
 
         private void PrepararGrilla()

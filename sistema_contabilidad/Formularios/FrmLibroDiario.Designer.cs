@@ -37,6 +37,7 @@
             txtHaber = new TextBox();
             btnAgregarLinea = new Button();
             btnQuitarLinea = new Button();
+            btnCalcIva = new Button();
             dgvDetalle = new DataGridView();
             panelInferior = new Panel();
             lblTotDebeCap = new Label();
@@ -127,6 +128,7 @@
             grpAgregar.Controls.Add(txtHaber);
             grpAgregar.Controls.Add(btnAgregarLinea);
             grpAgregar.Controls.Add(btnQuitarLinea);
+            grpAgregar.Controls.Add(btnCalcIva);
             grpAgregar.Dock = DockStyle.Top;
             grpAgregar.Location = new Point(0, 130);
             grpAgregar.Name = "grpAgregar";
@@ -201,6 +203,14 @@
             btnQuitarLinea.Text = "Quitar línea";
             btnQuitarLinea.UseVisualStyleBackColor = false;
             btnQuitarLinea.Click += btnQuitarLinea_Click;
+            btnCalcIva.FlatStyle = FlatStyle.Flat;
+            btnCalcIva.Location = new Point(500, 66);
+            btnCalcIva.Name = "btnCalcIva";
+            btnCalcIva.Size = new Size(120, 32);
+            btnCalcIva.TabIndex = 10;
+            btnCalcIva.Text = "Calc. IVA";
+            btnCalcIva.UseVisualStyleBackColor = true;
+            btnCalcIva.Click += btnCalcIva_Click;
             dgvDetalle.AllowUserToAddRows = false;
             dgvDetalle.AllowUserToDeleteRows = false;
             dgvDetalle.BackgroundColor = Color.White;
@@ -334,6 +344,7 @@
         private TextBox txtHaber;
         private Button btnAgregarLinea;
         private Button btnQuitarLinea;
+        private Button btnCalcIva;
         private DataGridView dgvDetalle;
         private Panel panelInferior;
         private Label lblTotDebeCap;
