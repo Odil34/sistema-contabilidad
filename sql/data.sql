@@ -1,14 +1,8 @@
-
-  -- Sistema de Contabilidad - data.sql
-  -- carga del catálogo de cuentas
-
-
- USE Sistema_ContableDB;
- GO
+USE [SistemaContabilidadDB];
+GO
 
 IF NOT EXISTS (SELECT 1 FROM dbo.Cuentas)
 INSERT INTO dbo.Cuentas (Codigo, Nombre, CodigoPadre, Tipo, Naturaleza, EsDetalle) VALUES
--- 1 ACTIVO
 ('1101','Efectivo y Equivalente',NULL,1,'Deudora',0),
 ('110101','Caja','1101',1,'Deudora',1),
 ('110102','Banco','1101',1,'Deudora',1),
@@ -23,7 +17,6 @@ INSERT INTO dbo.Cuentas (Codigo, Nombre, CodigoPadre, Tipo, Naturaleza, EsDetall
 ('1201','Propiedad, Planta y Equipo',NULL,1,'Deudora',0),
 ('120101','Mobiliario y Equipo de Oficina','1201',1,'Deudora',1),
 ('120102','Equipo de Transporte','1201',1,'Deudora',1),
--- 2 PASIVO
 ('2101','Cuentas por Pagar',NULL,2,'Acreedora',0),
 ('210101','Acreedores Varios','2101',2,'Acreedora',1),
 ('210102','Proveedores','2101',2,'Acreedora',1),
@@ -31,9 +24,7 @@ INSERT INTO dbo.Cuentas (Codigo, Nombre, CodigoPadre, Tipo, Naturaleza, EsDetall
 ('2103','IVA / Impuestos por Pagar',NULL,2,'Acreedora',0),
 ('210301','IVA Débito Fiscal','2103',2,'Acreedora',1),
 ('210302','IVA por Pagar','2103',2,'Acreedora',1),
--- 3 CAPITAL
 ('3101','Capital Social',NULL,3,'Acreedora',1),
--- 4 COSTOS Y GASTOS
 ('4101','Compras',NULL,4,'Deudora',1),
 ('4102','Gasto de Compra',NULL,4,'Deudora',1),
 ('4103','Devolución sobre Venta',NULL,4,'Deudora',1),
@@ -43,10 +34,9 @@ INSERT INTO dbo.Cuentas (Codigo, Nombre, CodigoPadre, Tipo, Naturaleza, EsDetall
 ('420201','Facturas','4202',4,'Deudora',1),
 ('4301','Gasto Financiero',NULL,4,'Deudora',0),
 ('430101','Comisión','4301',4,'Deudora',1),
--- 5 INGRESOS
 ('5101','Ventas',NULL,5,'Acreedora',1),
 ('5102','Devolución sobre Compra',NULL,5,'Acreedora',1);
 GO
 
--- Consulta de verificación (opcional):
 SELECT Tipo, COUNT(*) AS Cuentas FROM dbo.Cuentas GROUP BY Tipo ORDER BY Tipo;
+GO

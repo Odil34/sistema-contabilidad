@@ -1,12 +1,10 @@
--- SISTEMA CONTABLE BD
- USE Sistema_ContableDB;
- GO
+IF DB_ID(N'SistemaContabilidadDB') IS NULL
+    CREATE DATABASE [SistemaContabilidadDB];
+GO
 
-/* ---------- Catálogo de cuentas ----------
-   El primer dígito del código define la clasificación contable:
-     1 = Activo, 2 = Pasivo, 3 = Capital, 4 = Costos y Gastos, 5 = Ingresos.
-   Naturaleza: Deudora (Activo y Gastos) o Acreedora (Pasivo, Capital, Ingresos).
-   EsDetalle: 1 = cuenta que admite movimientos; 0 = cuenta de agrupación. */
+USE [SistemaContabilidadDB];
+GO
+
 IF OBJECT_ID('dbo.Cuentas', 'U') IS NULL
 CREATE TABLE dbo.Cuentas (
     Codigo       NVARCHAR(10)  NOT NULL PRIMARY KEY,
@@ -18,7 +16,6 @@ CREATE TABLE dbo.Cuentas (
 );
 GO
 
-/* ---------- Asientos: cabecera de cada partida del Libro Diario ---------- */
 IF OBJECT_ID('dbo.Asientos', 'U') IS NULL
 CREATE TABLE dbo.Asientos (
     IdAsiento     INT           IDENTITY(1,1) PRIMARY KEY,
@@ -29,10 +26,6 @@ CREATE TABLE dbo.Asientos (
 );
 GO
 
-/* ---------- AsientoDetalle: movimientos (líneas) de cada asiento ----------
-   Cada línea afecta una cuenta con un valor en el Debe o en el Haber.
-   La suma de Debe debe ser igual a la suma de Haber (partida doble),
-   validación que se aplica desde la aplicación antes de guardar. */
 IF OBJECT_ID('dbo.AsientoDetalle', 'U') IS NULL
 CREATE TABLE dbo.AsientoDetalle (
     IdDetalle    INT           IDENTITY(1,1) PRIMARY KEY,
