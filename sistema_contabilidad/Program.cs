@@ -4,10 +4,8 @@ namespace sistema_contabilidad
 {
     internal static class Program
     {
-        /// <summary>
-        ///  Punto de entrada principal de la aplicación.
-        /// </summary>
-        [STAThread]
+      
+[STAThread]
         static void Main()
         {
             ApplicationConfiguration.Initialize();
