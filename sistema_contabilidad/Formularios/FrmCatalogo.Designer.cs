@@ -26,9 +26,9 @@
             ((System.ComponentModel.ISupportInitialize)dgvCuentas).BeginInit();
             panelInferior.SuspendLayout();
             SuspendLayout();
-            //
+            // 
             // panelEncabezado
-            //
+            // 
             panelEncabezado.BackColor = Color.FromArgb(33, 71, 115);
             panelEncabezado.Controls.Add(lblTitulo);
             panelEncabezado.Dock = DockStyle.Top;
@@ -36,20 +36,20 @@
             panelEncabezado.Name = "panelEncabezado";
             panelEncabezado.Size = new Size(800, 55);
             panelEncabezado.TabIndex = 0;
-            //
+            // 
             // lblTitulo
-            //
+            // 
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.White;
             lblTitulo.Location = new Point(16, 12);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(297, 28);
+            lblTitulo.Size = new Size(380, 35);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Catálogo de Cuentas Contables";
-            //
+            // 
             // dgvCuentas
-            //
+            // 
             dgvCuentas.AllowUserToAddRows = false;
             dgvCuentas.AllowUserToDeleteRows = false;
             dgvCuentas.BackgroundColor = Color.White;
@@ -60,34 +60,35 @@
             dgvCuentas.Name = "dgvCuentas";
             dgvCuentas.ReadOnly = true;
             dgvCuentas.RowHeadersVisible = false;
+            dgvCuentas.RowHeadersWidth = 51;
             dgvCuentas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCuentas.Size = new Size(800, 385);
+            dgvCuentas.Size = new Size(800, 468);
             dgvCuentas.TabIndex = 1;
-            //
+            // 
             // panelInferior
-            //
+            // 
             panelInferior.Controls.Add(lblResumen);
             panelInferior.Dock = DockStyle.Bottom;
-            panelInferior.Location = new Point(0, 440);
+            panelInferior.Location = new Point(0, 523);
             panelInferior.Name = "panelInferior";
             panelInferior.Padding = new Padding(10, 8, 10, 8);
             panelInferior.Size = new Size(800, 40);
             panelInferior.TabIndex = 2;
-            //
+            // 
             // lblResumen
-            //
+            // 
             lblResumen.AutoSize = true;
             lblResumen.Location = new Point(12, 10);
             lblResumen.Name = "lblResumen";
-            lblResumen.Size = new Size(50, 20);
+            lblResumen.Size = new Size(61, 20);
             lblResumen.TabIndex = 0;
             lblResumen.Text = "Cuentas";
-            //
+            // 
             // FrmCatalogo
-            //
+            // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 480);
+            ClientSize = new Size(800, 563);
             Controls.Add(dgvCuentas);
             Controls.Add(panelInferior);
             Controls.Add(panelEncabezado);

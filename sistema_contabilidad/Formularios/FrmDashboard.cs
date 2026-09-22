@@ -2,10 +2,7 @@ using sistema_contabilidad.Datos;
 
 namespace sistema_contabilidad.Formularios
 {
-    /// <summary>
-    /// Dashboard: muestra un resumen general (indicadores) para que la ventana principal
-    /// no se vea vacía. Los números se leen en vivo de la base de datos.
-    /// </summary>
+   
     public partial class FrmDashboard : Form
     {
         private readonly DashboardDAL _dashboardDAL = new DashboardDAL();

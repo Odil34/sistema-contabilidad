@@ -2,10 +2,7 @@ using sistema_contabilidad.Formularios;
 
 namespace sistema_contabilidad
 {
-    /// <summary>
-    /// Ventana principal (contenedor MDI). Al abrir muestra el dashboard y desde su menú
-    /// se abren los demás módulos como formularios hijos.
-    /// </summary>
+
     public partial class FrmPrincipal : Form
     {
         public FrmPrincipal()
@@ -18,14 +15,11 @@ namespace sistema_contabilidad
             lblEstado.Text = "Base de datos: " + Datos.ConexionBD.NombreBaseDatos + "  |  Conectado";
             lblFecha.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
 
-            // Abre el dashboard automáticamente para que la ventana no se vea vacía.
+
             AbrirHijo<FrmDashboard>();
         }
 
-        /// <summary>
-        /// Abre un formulario hijo dentro del MDI. Si ya está abierto, solo lo activa
-        /// (patrón de instancia única) para no duplicar ventanas.
-        /// </summary>
+      
         private void AbrirHijo<T>() where T : Form, new()
         {
             foreach (Form abierto in MdiChildren)
