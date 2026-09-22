@@ -2,7 +2,6 @@ using sistema_contabilidad.Datos;
 
 namespace sistema_contabilidad.Formularios
 {
-    /// <summary>Muestra el catálogo de cuentas contables (solo lectura).</summary>
     public partial class FrmCatalogo : Form
     {
         private readonly CuentaDAL _cuentaDAL = new CuentaDAL();
@@ -24,17 +23,25 @@ namespace sistema_contabilidad.Formularios
 
             if (dgvCuentas.Columns.Count > 0)
             {
-                dgvCuentas.Columns["Codigo"].HeaderText = "Código";
-                dgvCuentas.Columns["Codigo"].Width = 90;
+                dgvCuentas.Columns["Código"].Width = 90;
                 dgvCuentas.Columns["Nombre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgvCuentas.Columns["Nivel"].Width = 90;
                 dgvCuentas.EnableHeadersVisualStyles = false;
                 dgvCuentas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(33, 71, 115);
                 dgvCuentas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
                 dgvCuentas.ColumnHeadersDefaultCellStyle.Font = new Font(dgvCuentas.Font, FontStyle.Bold);
-                dgvCuentas.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(238, 243, 249);
+
+                foreach (DataGridViewRow fila in dgvCuentas.Rows)
+                {
+                    if (fila.Cells["Nivel"].Value?.ToString() == "Principal")
+                    {
+                        fila.DefaultCellStyle.BackColor = Color.FromArgb(219, 229, 241);
+                        fila.DefaultCellStyle.Font = new Font(dgvCuentas.Font, FontStyle.Bold);
+                    }
+                }
             }
 
-            lblResumen.Text = $"Total de cuentas: {tabla.Rows.Count}";
+            lblResumen.Text = $"Total de cuentas: {tabla.Rows.Count}   (las cuentas Principales aparecen resaltadas y sus subcuentas indentadas)";
         }
     }
 }
