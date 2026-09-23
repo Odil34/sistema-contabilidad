@@ -1,5 +1,7 @@
 using System.IO;
 using Microsoft.Data.SqlClient;
+using sistema_contabilidad.Modelos;
+using sistema_contabilidad.Seguridad;
 
 namespace sistema_contabilidad.Datos
 {
@@ -14,6 +16,7 @@ namespace sistema_contabilidad.Datos
             CrearBaseDatos();
             CrearTablas();
             SembrarCatalogo();
+            SembrarSeguridad();
         }
 
         private static void CrearBaseDatos()
@@ -103,9 +106,80 @@ CREATE TABLE dbo.AsientoDetalle (
         REFERENCES dbo.Asientos(IdAsiento) ON DELETE CASCADE,
     CONSTRAINT FK_Detalle_Cuenta FOREIGN KEY (CodigoCuenta)
         REFERENCES dbo.Cuentas(Codigo)
+);
+
+IF OBJECT_ID('dbo.Roles', 'U') IS NULL
+CREATE TABLE dbo.Roles (
+    IdRol       INT           IDENTITY(1,1) PRIMARY KEY,
+    Nombre      NVARCHAR(50)  NOT NULL UNIQUE,
+    Descripcion NVARCHAR(200) NULL
+);
+
+IF OBJECT_ID('dbo.Usuarios', 'U') IS NULL
+CREATE TABLE dbo.Usuarios (
+    IdUsuario      INT           IDENTITY(1,1) PRIMARY KEY,
+    NombreUsuario  NVARCHAR(50)  NOT NULL UNIQUE,
+    NombreCompleto NVARCHAR(150) NULL,
+    ClaveHash      NVARCHAR(200) NOT NULL,
+    Salt           NVARCHAR(100) NOT NULL,
+    IdRol          INT           NOT NULL,
+    Activo         BIT           NOT NULL DEFAULT 1,
+    FechaCreacion  DATETIME      NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT FK_Usuario_Rol FOREIGN KEY (IdRol) REFERENCES dbo.Roles(IdRol)
 );";
 
             using var cmd = new SqlCommand(sql, con);
+            cmd.ExecuteNonQuery();
+        }
+
+        private static void SembrarSeguridad()
+        {
+            using var con = ConexionBD.ObtenerConexion();
+
+            using (var check = new SqlCommand("SELECT COUNT(*) FROM dbo.Roles", con))
+            {
+                if ((int)check.ExecuteScalar() == 0)
+                {
+                    var roles = new (string nombre, string desc)[]
+                    {
+                        (Rol.Administrador, "Acceso total, incluida la gestión de usuarios."),
+                        (Rol.Contador,      "Registra asientos y consulta todos los reportes; sin gestión de usuarios."),
+                        (Rol.Consulta,      "Solo lectura de reportes y estados financieros.")
+                    };
+                    foreach (var r in roles)
+                    {
+                        using var cmd = new SqlCommand(
+                            "INSERT INTO dbo.Roles (Nombre, Descripcion) VALUES (@n, @d)", con);
+                        cmd.Parameters.AddWithValue("@n", r.nombre);
+                        cmd.Parameters.AddWithValue("@d", r.desc);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            using (var check = new SqlCommand("SELECT COUNT(*) FROM dbo.Usuarios", con))
+            {
+                if ((int)check.ExecuteScalar() == 0)
+                {
+                    CrearUsuario(con, "admin", "Administrador del Sistema", "admin123", Rol.Administrador);
+                    CrearUsuario(con, "contador", "Contador General", "conta123", Rol.Contador);
+                    CrearUsuario(con, "consulta", "Usuario de Consulta", "consulta123", Rol.Consulta);
+                }
+            }
+        }
+
+        private static void CrearUsuario(SqlConnection con, string usuario, string nombre, string clave, string rol)
+        {
+            string salt = Hash.GenerarSalt();
+            string hash = Hash.Calcular(clave, salt);
+            using var cmd = new SqlCommand(
+                @"INSERT INTO dbo.Usuarios (NombreUsuario, NombreCompleto, ClaveHash, Salt, IdRol, Activo)
+                  SELECT @u, @n, @h, @s, IdRol, 1 FROM dbo.Roles WHERE Nombre = @r;", con);
+            cmd.Parameters.AddWithValue("@u", usuario);
+            cmd.Parameters.AddWithValue("@n", nombre);
+            cmd.Parameters.AddWithValue("@h", hash);
+            cmd.Parameters.AddWithValue("@s", salt);
+            cmd.Parameters.AddWithValue("@r", rol);
             cmd.ExecuteNonQuery();
         }
 
