@@ -16,6 +16,7 @@ namespace sistema_contabilidad
         {
             var u = Sesion.Actual;
             menuLibroDiario.Enabled = u.PuedeRegistrar;
+            menuLimpiar.Enabled = u.EsAdministrador;
             menuUsuarios.Enabled = u.PuedeGestionarUsuarios;
             Text = $"Sistema de Contabilidad  —  {u.Rol}";
 
@@ -45,6 +46,32 @@ namespace sistema_contabilidad
         private void menuCatalogoCuentas_Click(object sender, EventArgs e) => AbrirHijo<FrmCatalogo>();
 
         private void menuLibroDiario_Click(object sender, EventArgs e) => AbrirHijo<FrmLibroDiario>();
+
+        private void menuConsultaDiario_Click(object sender, EventArgs e) => AbrirHijo<FrmConsultaDiario>();
+
+        private void menuLimpiar_Click(object sender, EventArgs e)
+        {
+            if (!Sesion.Actual.EsAdministrador)
+            {
+                MessageBox.Show("Solo el Administrador puede limpiar los movimientos.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (MessageBox.Show(
+                    "Esto ELIMINARÁ todos los asientos y movimientos registrados.\n" +
+                    "El catálogo de cuentas y los usuarios NO se borran.\n\n" +
+                    "¿Desea continuar?",
+                    "Limpiar movimientos", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                return;
+
+            int borrados = new Datos.AsientoDAL().EliminarTodos();
+            foreach (Form hijo in MdiChildren)
+                if (hijo is FrmDashboard dash) dash.Refrescar();
+
+            MessageBox.Show($"Movimientos eliminados ({borrados} asiento(s)). La base quedó lista para un nuevo ejercicio.",
+                "Limpiar movimientos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
 
         private void menuLibroMayor_Click(object sender, EventArgs e) => AbrirHijo<FrmLibroMayor>();
 

@@ -60,6 +60,15 @@ namespace sistema_contabilidad.Datos
             cmd.ExecuteNonQuery();
         }
 
+        public int EliminarTodos()
+        {
+            using var con = Db.Abrir();
+            using (var cmdDet = Db.Cmd("DELETE FROM AsientoDetalle", con))
+                cmdDet.ExecuteNonQuery();
+            using var cmd = Db.Cmd("DELETE FROM Asientos", con);
+            return cmd.ExecuteNonQuery();
+        }
+
         public DataTable ObtenerLibroDiario(DateTime desde, DateTime hasta)
         {
             using var con = Db.Abrir();

@@ -26,6 +26,8 @@ namespace sistema_contabilidad.Formularios
             lblMovimientos.Text = r.TotalMovimientos.ToString();
         }
 
+        public void Refrescar() => CargarIndicadores();
+
         private void btnActualizar_Click(object sender, EventArgs e)
         {
             CargarIndicadores();
