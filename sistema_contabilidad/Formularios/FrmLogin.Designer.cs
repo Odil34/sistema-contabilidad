@@ -27,7 +27,6 @@
             lblError = new Label();
             btnIngresar = new Button();
             btnCancelar = new Button();
-            lblHint = new Label();
             panelHeader.SuspendLayout();
             SuspendLayout();
             panelHeader.BackColor = Color.FromArgb(33, 71, 115);
@@ -100,18 +99,11 @@
             btnCancelar.Text = "Salir";
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
-            lblHint.ForeColor = Color.Gray;
-            lblHint.Location = new Point(30, 300);
-            lblHint.Name = "lblHint";
-            lblHint.Size = new Size(340, 40);
-            lblHint.TabIndex = 7;
-            lblHint.Text = "Usuario inicial: admin / admin123";
             AcceptButton = btnIngresar;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancelar;
-            ClientSize = new Size(400, 350);
-            Controls.Add(lblHint);
+            ClientSize = new Size(400, 320);
             Controls.Add(btnCancelar);
             Controls.Add(btnIngresar);
             Controls.Add(lblError);
@@ -144,6 +136,5 @@
         private Label lblError;
         private Button btnIngresar;
         private Button btnCancelar;
-        private Label lblHint;
     }
 }
