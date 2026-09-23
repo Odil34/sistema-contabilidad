@@ -1,9 +1,12 @@
 using sistema_contabilidad.Formularios;
+using sistema_contabilidad.Seguridad;
 
 namespace sistema_contabilidad
 {
     public partial class FrmPrincipal : Form
     {
+        public bool CerrarSesionSolicitada { get; private set; }
+
         public FrmPrincipal()
         {
             InitializeComponent();
@@ -11,7 +14,12 @@ namespace sistema_contabilidad
 
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
-            lblEstado.Text = "Base de datos: " + Datos.ConexionBD.NombreBaseDatos + "  |  Conectado";
+            var u = Sesion.Actual;
+            menuLibroDiario.Enabled = u.PuedeRegistrar;
+            menuUsuarios.Enabled = u.PuedeGestionarUsuarios;
+            Text = $"Sistema de Contabilidad  —  {u.Rol}";
+
+            lblEstado.Text = $"Usuario: {u.NombreUsuario}  ·  Rol: {u.Rol}  |  Base: {Datos.ConexionBD.NombreBaseDatos}";
             lblFecha.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
             AbrirHijo<FrmDashboard>();
         }
@@ -48,14 +56,37 @@ namespace sistema_contabilidad
 
         private void menuDashboard_Click(object sender, EventArgs e) => AbrirHijo<FrmDashboard>();
 
+        private void menuUsuarios_Click(object sender, EventArgs e)
+        {
+            if (!Sesion.Actual.PuedeGestionarUsuarios)
+            {
+                MessageBox.Show("No tiene permisos para gestionar usuarios.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            AbrirHijo<FrmUsuarios>();
+        }
+
+        private void menuCerrarSesion_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("¿Desea cerrar la sesión actual?", "Cerrar sesión",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                CerrarSesionSolicitada = true;
+                Close();
+            }
+        }
+
         private void menuAcercaDe_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
                 "Sistema de Contabilidad v1.0\n\n" +
+                "Módulos: Seguridad (usuarios y roles), Libro Diario (partida doble),\n" +
+                "Mayorización, Estados Financieros y Salud Financiera.\n\n" +
                 "Desarrollado con C# Windows Forms (MDI) y SQL Server.",
                 "Acerca de", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void menuSalir_Click(object sender, EventArgs e) => Close();
+        private void menuSalir_Click(object sender, EventArgs e) => Application.Exit();
     }
 }

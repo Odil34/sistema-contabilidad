@@ -31,6 +31,9 @@
             menuEstadoResultados = new ToolStripMenuItem();
             menuVer = new ToolStripMenuItem();
             menuDashboard = new ToolStripMenuItem();
+            menuSeguridad = new ToolStripMenuItem();
+            menuUsuarios = new ToolStripMenuItem();
+            menuCerrarSesion = new ToolStripMenuItem();
             menuAyuda = new ToolStripMenuItem();
             menuAcercaDe = new ToolStripMenuItem();
             barraEstado = new StatusStrip();
@@ -40,7 +43,7 @@
             barraEstado.SuspendLayout();
             SuspendLayout();
             menuPrincipal.ImageScalingSize = new Size(20, 20);
-            menuPrincipal.Items.AddRange(new ToolStripItem[] { menuArchivo, menuCatalogo, menuRegistro, menuReportes, menuVer, menuAyuda });
+            menuPrincipal.Items.AddRange(new ToolStripItem[] { menuArchivo, menuCatalogo, menuRegistro, menuReportes, menuVer, menuSeguridad, menuAyuda });
             menuPrincipal.Location = new Point(0, 0);
             menuPrincipal.Name = "menuPrincipal";
             menuPrincipal.Padding = new Padding(6, 3, 0, 3);
@@ -98,6 +101,18 @@
             menuDashboard.Size = new Size(240, 26);
             menuDashboard.Text = "&Dashboard";
             menuDashboard.Click += menuDashboard_Click;
+            menuSeguridad.DropDownItems.AddRange(new ToolStripItem[] { menuUsuarios, menuCerrarSesion });
+            menuSeguridad.Name = "menuSeguridad";
+            menuSeguridad.Size = new Size(92, 24);
+            menuSeguridad.Text = "&Seguridad";
+            menuUsuarios.Name = "menuUsuarios";
+            menuUsuarios.Size = new Size(240, 26);
+            menuUsuarios.Text = "Gestión de &Usuarios";
+            menuUsuarios.Click += menuUsuarios_Click;
+            menuCerrarSesion.Name = "menuCerrarSesion";
+            menuCerrarSesion.Size = new Size(240, 26);
+            menuCerrarSesion.Text = "&Cerrar sesión";
+            menuCerrarSesion.Click += menuCerrarSesion_Click;
             menuAyuda.DropDownItems.AddRange(new ToolStripItem[] { menuAcercaDe });
             menuAyuda.Name = "menuAyuda";
             menuAyuda.Size = new Size(66, 24);
@@ -157,6 +172,9 @@
         private ToolStripMenuItem menuEstadoResultados;
         private ToolStripMenuItem menuVer;
         private ToolStripMenuItem menuDashboard;
+        private ToolStripMenuItem menuSeguridad;
+        private ToolStripMenuItem menuUsuarios;
+        private ToolStripMenuItem menuCerrarSesion;
         private ToolStripMenuItem menuAyuda;
         private ToolStripMenuItem menuAcercaDe;
         private StatusStrip barraEstado;

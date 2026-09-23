@@ -1,16 +1,16 @@
 using sistema_contabilidad.Datos;
+using sistema_contabilidad.Formularios;
+using sistema_contabilidad.Seguridad;
 
 namespace sistema_contabilidad
 {
     internal static class Program
     {
-      
-[STAThread]
+        [STAThread]
         static void Main()
         {
             ApplicationConfiguration.Initialize();
 
-            // Crea la base de datos, las tablas y el catálogo la primera vez que se ejecuta.
             try
             {
                 InicializadorBD.Inicializar();
@@ -26,7 +26,22 @@ namespace sistema_contabilidad
                 return;
             }
 
-            Application.Run(new FrmPrincipal());
+            while (true)
+            {
+                using (var login = new FrmLogin())
+                {
+                    if (login.ShowDialog() != DialogResult.OK || Sesion.Actual == null)
+                        return;
+                }
+
+                var principal = new FrmPrincipal();
+                Application.Run(principal);
+
+                if (!principal.CerrarSesionSolicitada)
+                    break;
+
+                Sesion.Cerrar();
+            }
         }
     }
 }
