@@ -6,6 +6,12 @@ namespace sistema_contabilidad.Formularios
     {
         private const decimal Tasa = 0.13m;
 
+        private decimal _base;
+        private decimal _iva;
+        private decimal _total;
+
+        public decimal? ValorElegido { get; private set; }
+
         public FrmCalculadoraIva()
         {
             InitializeComponent();
@@ -28,24 +34,39 @@ namespace sistema_contabilidad.Formularios
                 return;
             }
 
-            decimal baseImponible, iva, total;
-
             if (cboModo.SelectedIndex == 0)
             {
-                baseImponible = monto;
-                iva = Math.Round(monto * Tasa, 2);
-                total = baseImponible + iva;
+                _base = monto;
+                _iva = Math.Round(monto * Tasa, 2);
+                _total = _base + _iva;
             }
             else
             {
-                baseImponible = Math.Round(monto / (1 + Tasa), 2);
-                iva = Math.Round(monto - baseImponible, 2);
-                total = monto;
+                _base = Math.Round(monto / (1 + Tasa), 2);
+                _iva = Math.Round(monto - _base, 2);
+                _total = monto;
             }
 
-            lblBase.Text = baseImponible.ToString("N2");
-            lblIva.Text = iva.ToString("N2");
-            lblTotal.Text = total.ToString("N2");
+            lblBase.Text = _base.ToString("N2");
+            lblIva.Text = _iva.ToString("N2");
+            lblTotal.Text = _total.ToString("N2");
+
+            btnUsarBase.Enabled = true;
+            btnUsarIva.Enabled = true;
+            btnUsarTotal.Enabled = true;
+        }
+
+        private void btnUsarBase_Click(object sender, EventArgs e) => Devolver(_base);
+
+        private void btnUsarIva_Click(object sender, EventArgs e) => Devolver(_iva);
+
+        private void btnUsarTotal_Click(object sender, EventArgs e) => Devolver(_total);
+
+        private void Devolver(decimal valor)
+        {
+            ValorElegido = valor;
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private static decimal ParsearMonto(string texto)

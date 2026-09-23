@@ -27,7 +27,20 @@ namespace sistema_contabilidad.Formularios
         private void btnCalcIva_Click(object sender, EventArgs e)
         {
             using var calc = new FrmCalculadoraIva();
-            calc.ShowDialog(this);
+            if (calc.ShowDialog(this) == DialogResult.OK && calc.ValorElegido.HasValue)
+            {
+                string valor = calc.ValorElegido.Value.ToString("0.00");
+                if (cboCuenta.SelectedItem is Cuenta cuenta && cuenta.Naturaleza == "Acreedora")
+                {
+                    txtHaber.Text = valor;
+                    txtDebe.Text = "0.00";
+                }
+                else
+                {
+                    txtDebe.Text = valor;
+                    txtHaber.Text = "0.00";
+                }
+            }
         }
 
         private void PrepararGrilla()
