@@ -13,10 +13,29 @@ namespace sistema_contabilidad.Datos
     {
         public static void Inicializar()
         {
-            CrearBaseDatos();
-            CrearTablas();
-            SembrarCatalogo();
-            SembrarSeguridad();
+            EjecutarConReintentos(() =>
+            {
+                CrearBaseDatos();
+                CrearTablas();
+                SembrarCatalogo();
+                SembrarSeguridad();
+            });
+        }
+
+        private static void EjecutarConReintentos(Action accion, int intentos = 4)
+        {
+            for (int i = 1; ; i++)
+            {
+                try
+                {
+                    accion();
+                    return;
+                }
+                catch (SqlException) when (i < intentos)
+                {
+                    System.Threading.Thread.Sleep(1500);
+                }
+            }
         }
 
         private static void CrearBaseDatos()
