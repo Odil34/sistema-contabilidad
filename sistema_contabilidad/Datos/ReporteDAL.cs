@@ -1,5 +1,4 @@
 using System.Data;
-using Microsoft.Data.SqlClient;
 using sistema_contabilidad.Modelos;
 
 namespace sistema_contabilidad.Datos
@@ -9,33 +8,34 @@ namespace sistema_contabilidad.Datos
         public List<SaldoCuenta> ObtenerSaldos(DateTime hasta, bool soloConMovimiento = true)
         {
             var lista = new List<SaldoCuenta>();
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand(
-                @"SELECT c.Codigo, c.Nombre, c.Naturaleza, c.Tipo, c.CodigoPadre, ISNULL(p.Nombre, ''),
-                         ISNULL(SUM(d.Debe), 0)  AS TotalDebe,
-                         ISNULL(SUM(d.Haber), 0) AS TotalHaber
-                  FROM dbo.Cuentas c
-                  LEFT JOIN dbo.Cuentas p ON p.Codigo = c.CodigoPadre
-                  LEFT JOIN dbo.AsientoDetalle d ON d.CodigoCuenta = c.Codigo
-                  LEFT JOIN dbo.Asientos a ON a.IdAsiento = d.IdAsiento AND a.Fecha <= @hasta
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd(
+                @"SELECT c.Codigo, c.Nombre, c.Naturaleza, c.Tipo, c.CodigoPadre, COALESCE(p.Nombre, ''),
+                         COALESCE(SUM(d.Debe), 0)  AS TotalDebe,
+                         COALESCE(SUM(d.Haber), 0) AS TotalHaber
+                  FROM Cuentas c
+                  LEFT JOIN Cuentas p ON p.Codigo = c.CodigoPadre
+                  LEFT JOIN AsientoDetalle d ON d.CodigoCuenta = c.Codigo
+                  LEFT JOIN Asientos a ON a.IdAsiento = d.IdAsiento AND a.Fecha <= @hasta
                   WHERE c.EsDetalle = 1
                   GROUP BY c.Codigo, c.Nombre, c.Naturaleza, c.Tipo, c.CodigoPadre, p.Nombre
                   ORDER BY c.Codigo", con);
-            cmd.Parameters.AddWithValue("@hasta", hasta.Date);
+            Db.P(cmd, "@hasta", Db.Fecha(hasta));
+
             using var dr = cmd.ExecuteReader();
             while (dr.Read())
             {
-                string padreNom = dr.GetString(5);
+                string padreNom = Db.Str(dr, 5);
                 var s = new SaldoCuenta
                 {
-                    Codigo = dr.GetString(0),
-                    Nombre = dr.GetString(1),
-                    Naturaleza = dr.GetString(2),
-                    Tipo = dr.GetInt32(3),
-                    CodigoPadre = dr.IsDBNull(4) ? null : dr.GetString(4),
+                    Codigo = Db.Str(dr, 0),
+                    Nombre = Db.Str(dr, 1),
+                    Naturaleza = Db.Str(dr, 2),
+                    Tipo = Db.Int(dr, 3),
+                    CodigoPadre = Db.Str(dr, 4),
                     NombrePadre = string.IsNullOrEmpty(padreNom) ? null : padreNom,
-                    TotalDebe = dr.GetDecimal(6),
-                    TotalHaber = dr.GetDecimal(7)
+                    TotalDebe = Db.Dec(dr, 6),
+                    TotalHaber = Db.Dec(dr, 7)
                 };
                 if (soloConMovimiento && s.TotalDebe == 0 && s.TotalHaber == 0)
                     continue;
@@ -57,25 +57,25 @@ namespace sistema_contabilidad.Datos
             tabla.Columns.Add("Haber", typeof(decimal));
             tabla.Columns.Add("Saldo", typeof(decimal));
 
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand(
-                @"SELECT a.Fecha, a.Numero, ISNULL(d.Concepto, a.Concepto) AS Concepto, d.Debe, d.Haber
-                  FROM dbo.AsientoDetalle d
-                  INNER JOIN dbo.Asientos a ON a.IdAsiento = d.IdAsiento
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd(
+                @"SELECT a.Fecha, a.Numero, COALESCE(d.Concepto, a.Concepto) AS Concepto, d.Debe, d.Haber
+                  FROM AsientoDetalle d
+                  INNER JOIN Asientos a ON a.IdAsiento = d.IdAsiento
                   WHERE d.CodigoCuenta = @cod AND a.Fecha BETWEEN @desde AND @hasta
                   ORDER BY a.Fecha, a.Numero, d.IdDetalle", con);
-            cmd.Parameters.AddWithValue("@cod", codigo);
-            cmd.Parameters.AddWithValue("@desde", desde.Date);
-            cmd.Parameters.AddWithValue("@hasta", hasta.Date);
+            Db.P(cmd, "@cod", codigo);
+            Db.P(cmd, "@desde", Db.Fecha(desde));
+            Db.P(cmd, "@hasta", Db.Fecha(hasta));
 
             decimal saldo = 0;
             using var dr = cmd.ExecuteReader();
             while (dr.Read())
             {
-                decimal debe = dr.GetDecimal(3);
-                decimal haber = dr.GetDecimal(4);
+                decimal debe = Db.Dec(dr, 3);
+                decimal haber = Db.Dec(dr, 4);
                 saldo += deudora ? (debe - haber) : (haber - debe);
-                tabla.Rows.Add(dr.GetDateTime(0), dr.GetInt32(1), dr.GetString(2), debe, haber, saldo);
+                tabla.Rows.Add(Db.Fecha(dr, 0), Db.Int(dr, 1), Db.Str(dr, 2), debe, haber, saldo);
             }
             return tabla;
         }

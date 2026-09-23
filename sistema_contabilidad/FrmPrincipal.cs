@@ -19,7 +19,7 @@ namespace sistema_contabilidad
             menuUsuarios.Enabled = u.PuedeGestionarUsuarios;
             Text = $"Sistema de Contabilidad  —  {u.Rol}";
 
-            lblEstado.Text = $"Usuario: {u.NombreUsuario}  ·  Rol: {u.Rol}  |  Base: {Datos.ConexionBD.NombreBaseDatos}";
+            lblEstado.Text = $"Usuario: {u.NombreUsuario}  ·  Rol: {u.Rol}  |  Base: {Datos.Db.Proveedor}";
             lblFecha.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
             AbrirHijo<FrmDashboard>();
         }

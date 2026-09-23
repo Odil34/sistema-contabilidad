@@ -15,6 +15,10 @@ namespace sistema_contabilidad.Datos
         {
             get
             {
+                string env = Environment.GetEnvironmentVariable("SISTEMACONTABILIDAD_CONN");
+                if (!string.IsNullOrWhiteSpace(env))
+                    return env;
+
                 var cfg = ConfigurationManager.ConnectionStrings[NombreConexion];
                 if (cfg != null && !string.IsNullOrWhiteSpace(cfg.ConnectionString))
                     return cfg.ConnectionString;

@@ -38,6 +38,10 @@ namespace sistema_contabilidad.Formularios
                         fila.DefaultCellStyle.BackColor = Color.FromArgb(219, 229, 241);
                         fila.DefaultCellStyle.Font = new Font(dgvCuentas.Font, FontStyle.Bold);
                     }
+                    else
+                    {
+                        fila.Cells["Nombre"].Value = "      " + fila.Cells["Nombre"].Value;
+                    }
                 }
             }
 

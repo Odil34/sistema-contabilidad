@@ -1,5 +1,4 @@
 using System.Data;
-using Microsoft.Data.SqlClient;
 using sistema_contabilidad.Modelos;
 using sistema_contabilidad.Seguridad;
 
@@ -9,32 +8,32 @@ namespace sistema_contabilidad.Datos
     {
         public Usuario Autenticar(string nombreUsuario, string clave)
         {
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand(
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd(
                 @"SELECT u.IdUsuario, u.NombreUsuario, u.NombreCompleto, u.ClaveHash, u.Salt,
-                         u.IdRol, r.Nombre AS Rol, u.Activo
-                  FROM dbo.Usuarios u
-                  INNER JOIN dbo.Roles r ON r.IdRol = u.IdRol
+                         u.IdRol, r.Nombre, u.Activo
+                  FROM Usuarios u
+                  INNER JOIN Roles r ON r.IdRol = u.IdRol
                   WHERE u.NombreUsuario = @u", con);
-            cmd.Parameters.AddWithValue("@u", nombreUsuario);
+            Db.P(cmd, "@u", nombreUsuario);
 
             using var dr = cmd.ExecuteReader();
             if (!dr.Read()) return null;
 
-            bool activo = dr.GetBoolean(dr.GetOrdinal("Activo"));
+            bool activo = Db.Bool(dr, 7);
             if (!activo) return null;
 
-            string hash = dr.GetString(dr.GetOrdinal("ClaveHash"));
-            string salt = dr.GetString(dr.GetOrdinal("Salt"));
+            string hash = Db.Str(dr, 3);
+            string salt = Db.Str(dr, 4);
             if (!Hash.Verificar(clave, salt, hash)) return null;
 
             return new Usuario
             {
-                IdUsuario = dr.GetInt32(dr.GetOrdinal("IdUsuario")),
-                NombreUsuario = dr.GetString(dr.GetOrdinal("NombreUsuario")),
-                NombreCompleto = dr.IsDBNull(dr.GetOrdinal("NombreCompleto")) ? "" : dr.GetString(dr.GetOrdinal("NombreCompleto")),
-                IdRol = dr.GetInt32(dr.GetOrdinal("IdRol")),
-                Rol = dr.GetString(dr.GetOrdinal("Rol")),
+                IdUsuario = Db.Int(dr, 0),
+                NombreUsuario = Db.Str(dr, 1),
+                NombreCompleto = Db.Str(dr, 2) ?? "",
+                IdRol = Db.Int(dr, 5),
+                Rol = Db.Str(dr, 6),
                 Activo = activo
             };
         }
@@ -42,16 +41,16 @@ namespace sistema_contabilidad.Datos
         public List<Rol> ListarRoles()
         {
             var lista = new List<Rol>();
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand("SELECT IdRol, Nombre, Descripcion FROM dbo.Roles ORDER BY IdRol", con);
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd("SELECT IdRol, Nombre, Descripcion FROM Roles ORDER BY IdRol", con);
             using var dr = cmd.ExecuteReader();
             while (dr.Read())
             {
                 lista.Add(new Rol
                 {
-                    IdRol = dr.GetInt32(0),
-                    Nombre = dr.GetString(1),
-                    Descripcion = dr.IsDBNull(2) ? "" : dr.GetString(2)
+                    IdRol = Db.Int(dr, 0),
+                    Nombre = Db.Str(dr, 1),
+                    Descripcion = Db.Str(dr, 2) ?? ""
                 });
             }
             return lista;
@@ -59,25 +58,22 @@ namespace sistema_contabilidad.Datos
 
         public DataTable ObtenerTabla()
         {
-            var tabla = new DataTable();
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand(
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd(
                 @"SELECT u.IdUsuario AS [Id], u.NombreUsuario AS [Usuario], u.NombreCompleto AS [Nombre completo],
                          r.Nombre AS [Rol], CASE WHEN u.Activo = 1 THEN 'Activo' ELSE 'Inactivo' END AS [Estado]
-                  FROM dbo.Usuarios u
-                  INNER JOIN dbo.Roles r ON r.IdRol = u.IdRol
+                  FROM Usuarios u
+                  INNER JOIN Roles r ON r.IdRol = u.IdRol
                   ORDER BY u.NombreUsuario", con);
-            using var da = new SqlDataAdapter(cmd);
-            da.Fill(tabla);
-            return tabla;
+            return Db.Tabla(cmd);
         }
 
         public bool Existe(string nombreUsuario)
         {
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand("SELECT COUNT(*) FROM dbo.Usuarios WHERE NombreUsuario = @u", con);
-            cmd.Parameters.AddWithValue("@u", nombreUsuario);
-            return (int)cmd.ExecuteScalar() > 0;
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd("SELECT COUNT(*) FROM Usuarios WHERE NombreUsuario = @u", con);
+            Db.P(cmd, "@u", nombreUsuario);
+            return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
         }
 
         public void Crear(string nombreUsuario, string nombreCompleto, string clave, int idRol)
@@ -85,24 +81,24 @@ namespace sistema_contabilidad.Datos
             string salt = Hash.GenerarSalt();
             string hash = Hash.Calcular(clave, salt);
 
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand(
-                @"INSERT INTO dbo.Usuarios (NombreUsuario, NombreCompleto, ClaveHash, Salt, IdRol, Activo)
-                  VALUES (@u, @n, @h, @s, @r, 1);", con);
-            cmd.Parameters.AddWithValue("@u", nombreUsuario);
-            cmd.Parameters.AddWithValue("@n", (object)nombreCompleto ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("@h", hash);
-            cmd.Parameters.AddWithValue("@s", salt);
-            cmd.Parameters.AddWithValue("@r", idRol);
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd(
+                @"INSERT INTO Usuarios (NombreUsuario, NombreCompleto, ClaveHash, Salt, IdRol, Activo)
+                  VALUES (@u, @n, @h, @s, @r, 1)", con);
+            Db.P(cmd, "@u", nombreUsuario);
+            Db.P(cmd, "@n", nombreCompleto);
+            Db.P(cmd, "@h", hash);
+            Db.P(cmd, "@s", salt);
+            Db.P(cmd, "@r", idRol);
             cmd.ExecuteNonQuery();
         }
 
         public void CambiarEstado(int idUsuario, bool activo)
         {
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand("UPDATE dbo.Usuarios SET Activo = @a WHERE IdUsuario = @id", con);
-            cmd.Parameters.AddWithValue("@a", activo);
-            cmd.Parameters.AddWithValue("@id", idUsuario);
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd("UPDATE Usuarios SET Activo = @a WHERE IdUsuario = @id", con);
+            Db.P(cmd, "@a", activo ? 1 : 0);
+            Db.P(cmd, "@id", idUsuario);
             cmd.ExecuteNonQuery();
         }
 
@@ -110,12 +106,11 @@ namespace sistema_contabilidad.Datos
         {
             string salt = Hash.GenerarSalt();
             string hash = Hash.Calcular(nuevaClave, salt);
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand(
-                "UPDATE dbo.Usuarios SET ClaveHash = @h, Salt = @s WHERE IdUsuario = @id", con);
-            cmd.Parameters.AddWithValue("@h", hash);
-            cmd.Parameters.AddWithValue("@s", salt);
-            cmd.Parameters.AddWithValue("@id", idUsuario);
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd("UPDATE Usuarios SET ClaveHash = @h, Salt = @s WHERE IdUsuario = @id", con);
+            Db.P(cmd, "@h", hash);
+            Db.P(cmd, "@s", salt);
+            Db.P(cmd, "@id", idUsuario);
             cmd.ExecuteNonQuery();
         }
     }

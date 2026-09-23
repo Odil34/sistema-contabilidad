@@ -1,8 +1,5 @@
-using Microsoft.Data.SqlClient;
-
 namespace sistema_contabilidad.Datos
 {
-    /// <summary>Indicadores resumidos que se muestran en el dashboard de la ventana principal.</summary>
     public class ResumenDashboard
     {
         public int TotalCuentas { get; set; }
@@ -11,26 +8,25 @@ namespace sistema_contabilidad.Datos
         public int TotalMovimientos { get; set; }
     }
 
-    /// <summary>Acceso a datos para los indicadores del dashboard.</summary>
     public class DashboardDAL
     {
         public ResumenDashboard ObtenerResumen()
         {
-            using var con = ConexionBD.ObtenerConexion();
-            using var cmd = new SqlCommand(
+            using var con = Db.Abrir();
+            using var cmd = Db.Cmd(
                 @"SELECT
-                    (SELECT COUNT(*) FROM dbo.Cuentas),
-                    (SELECT COUNT(*) FROM dbo.Cuentas WHERE EsDetalle = 1),
-                    (SELECT COUNT(*) FROM dbo.Asientos),
-                    (SELECT COUNT(*) FROM dbo.AsientoDetalle);", con);
+                    (SELECT COUNT(*) FROM Cuentas),
+                    (SELECT COUNT(*) FROM Cuentas WHERE EsDetalle = 1),
+                    (SELECT COUNT(*) FROM Asientos),
+                    (SELECT COUNT(*) FROM AsientoDetalle)", con);
             using var dr = cmd.ExecuteReader();
             dr.Read();
             return new ResumenDashboard
             {
-                TotalCuentas = dr.GetInt32(0),
-                CuentasDetalle = dr.GetInt32(1),
-                TotalAsientos = dr.GetInt32(2),
-                TotalMovimientos = dr.GetInt32(3)
+                TotalCuentas = Db.Int(dr, 0),
+                CuentasDetalle = Db.Int(dr, 1),
+                TotalAsientos = Db.Int(dr, 2),
+                TotalMovimientos = Db.Int(dr, 3)
             };
         }
     }
