@@ -1,4 +1,4 @@
-using System.Globalization;
+using sistema_contabilidad.Utilidades;
 
 namespace sistema_contabilidad.Formularios
 {
@@ -26,7 +26,7 @@ namespace sistema_contabilidad.Formularios
 
         private void btnCalcular_Click(object sender, EventArgs e)
         {
-            decimal monto = ParsearMonto(txtMonto.Text);
+            decimal monto = Numero.ParsearMonto(txtMonto.Text);
             if (monto <= 0)
             {
                 MessageBox.Show("Ingrese un monto mayor a cero.", "Validación",
@@ -67,15 +67,6 @@ namespace sistema_contabilidad.Formularios
             ValorElegido = valor;
             DialogResult = DialogResult.OK;
             Close();
-        }
-
-        private static decimal ParsearMonto(string texto)
-        {
-            if (string.IsNullOrWhiteSpace(texto)) return 0;
-            texto = texto.Trim().Replace(",", ".");
-            return decimal.TryParse(texto, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal valor)
-                ? valor
-                : 0;
         }
     }
 }

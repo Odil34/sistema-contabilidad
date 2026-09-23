@@ -1,7 +1,7 @@
 using System.Data;
-using System.Globalization;
 using sistema_contabilidad.Datos;
 using sistema_contabilidad.Modelos;
+using sistema_contabilidad.Utilidades;
 
 namespace sistema_contabilidad.Formularios
 {
@@ -68,7 +68,7 @@ namespace sistema_contabilidad.Formularios
         private void NuevoAsiento()
         {
             _detalle.Rows.Clear();
-            lblNumero.Text = _asientoDAL.SiguienteNumero().ToString();
+            nudNumero.Value = _asientoDAL.SiguienteNumero();
             dtpFecha.Value = DateTime.Today;
             txtConcepto.Clear();
             LimpiarLinea();
@@ -92,8 +92,8 @@ namespace sistema_contabilidad.Formularios
                 return;
             }
 
-            decimal debe = ParsearMonto(txtDebe.Text);
-            decimal haber = ParsearMonto(txtHaber.Text);
+            decimal debe = Numero.ParsearMonto(txtDebe.Text);
+            decimal haber = Numero.ParsearMonto(txtHaber.Text);
 
             if (debe < 0 || haber < 0)
             {
@@ -166,7 +166,7 @@ namespace sistema_contabilidad.Formularios
 
             var asiento = new Asiento
             {
-                Numero = int.Parse(lblNumero.Text),
+                Numero = (int)nudNumero.Value,
                 Fecha = dtpFecha.Value.Date,
                 Concepto = txtConcepto.Text.Trim()
             };
@@ -220,15 +220,6 @@ namespace sistema_contabilidad.Formularios
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             NuevoAsiento();
-        }
-
-        private static decimal ParsearMonto(string texto)
-        {
-            if (string.IsNullOrWhiteSpace(texto)) return 0;
-            texto = texto.Trim().Replace(",", ".");
-            return decimal.TryParse(texto, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal valor)
-                ? Math.Round(valor, 2)
-                : 0;
         }
     }
 }

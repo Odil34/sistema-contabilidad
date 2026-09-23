@@ -21,7 +21,7 @@
             lblTitulo = new Label();
             grpDatos = new GroupBox();
             lblNumeroCap = new Label();
-            lblNumero = new Label();
+            nudNumero = new NumericUpDown();
             lblFechaCap = new Label();
             dtpFecha = new DateTimePicker();
             lblConceptoCap = new Label();
@@ -51,6 +51,7 @@
             panelEncabezado.SuspendLayout();
             grpDatos.SuspendLayout();
             grpAgregar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudNumero).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDetalle).BeginInit();
             panelInferior.SuspendLayout();
             SuspendLayout();
@@ -70,7 +71,7 @@
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Libro Diario - Registro de Asientos";
             grpDatos.Controls.Add(lblNumeroCap);
-            grpDatos.Controls.Add(lblNumero);
+            grpDatos.Controls.Add(nudNumero);
             grpDatos.Controls.Add(lblFechaCap);
             grpDatos.Controls.Add(dtpFecha);
             grpDatos.Controls.Add(lblConceptoCap);
@@ -89,14 +90,15 @@
             lblNumeroCap.Size = new Size(78, 20);
             lblNumeroCap.TabIndex = 0;
             lblNumeroCap.Text = "Asiento N°:";
-            lblNumero.AutoSize = true;
-            lblNumero.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblNumero.ForeColor = Color.FromArgb(33, 71, 115);
-            lblNumero.Location = new Point(99, 33);
-            lblNumero.Name = "lblNumero";
-            lblNumero.Size = new Size(18, 23);
-            lblNumero.TabIndex = 1;
-            lblNumero.Text = "1";
+            nudNumero.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            nudNumero.ForeColor = Color.FromArgb(33, 71, 115);
+            nudNumero.Location = new Point(99, 29);
+            nudNumero.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            nudNumero.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudNumero.Name = "nudNumero";
+            nudNumero.Size = new Size(70, 27);
+            nudNumero.TabIndex = 1;
+            nudNumero.Value = new decimal(new int[] { 1, 0, 0, 0 });
             lblFechaCap.AutoSize = true;
             lblFechaCap.Location = new Point(180, 33);
             lblFechaCap.Name = "lblFechaCap";
@@ -316,6 +318,7 @@
             grpDatos.PerformLayout();
             grpAgregar.ResumeLayout(false);
             grpAgregar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudNumero).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvDetalle).EndInit();
             panelInferior.ResumeLayout(false);
             panelInferior.PerformLayout();
@@ -328,7 +331,7 @@
         private Label lblTitulo;
         private GroupBox grpDatos;
         private Label lblNumeroCap;
-        private Label lblNumero;
+        private NumericUpDown nudNumero;
         private Label lblFechaCap;
         private DateTimePicker dtpFecha;
         private Label lblConceptoCap;
