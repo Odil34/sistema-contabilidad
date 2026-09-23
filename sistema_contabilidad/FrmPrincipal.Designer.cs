@@ -29,6 +29,9 @@
             menuBalanceComprobacion = new ToolStripMenuItem();
             menuBalanceGeneral = new ToolStripMenuItem();
             menuEstadoResultados = new ToolStripMenuItem();
+            menuHerramientas = new ToolStripMenuItem();
+            menuSaludFinanciera = new ToolStripMenuItem();
+            menuIva = new ToolStripMenuItem();
             menuVer = new ToolStripMenuItem();
             menuDashboard = new ToolStripMenuItem();
             menuSeguridad = new ToolStripMenuItem();
@@ -43,7 +46,7 @@
             barraEstado.SuspendLayout();
             SuspendLayout();
             menuPrincipal.ImageScalingSize = new Size(20, 20);
-            menuPrincipal.Items.AddRange(new ToolStripItem[] { menuArchivo, menuCatalogo, menuRegistro, menuReportes, menuVer, menuSeguridad, menuAyuda });
+            menuPrincipal.Items.AddRange(new ToolStripItem[] { menuArchivo, menuCatalogo, menuRegistro, menuReportes, menuHerramientas, menuVer, menuSeguridad, menuAyuda });
             menuPrincipal.Location = new Point(0, 0);
             menuPrincipal.Name = "menuPrincipal";
             menuPrincipal.Padding = new Padding(6, 3, 0, 3);
@@ -93,6 +96,18 @@
             menuEstadoResultados.Size = new Size(266, 26);
             menuEstadoResultados.Text = "Estado de &Resultados";
             menuEstadoResultados.Click += menuEstadoResultados_Click;
+            menuHerramientas.DropDownItems.AddRange(new ToolStripItem[] { menuSaludFinanciera, menuIva });
+            menuHerramientas.Name = "menuHerramientas";
+            menuHerramientas.Size = new Size(112, 24);
+            menuHerramientas.Text = "&Herramientas";
+            menuSaludFinanciera.Name = "menuSaludFinanciera";
+            menuSaludFinanciera.Size = new Size(290, 26);
+            menuSaludFinanciera.Text = "Panel de &Salud Financiera";
+            menuSaludFinanciera.Click += menuSaludFinanciera_Click;
+            menuIva.Name = "menuIva";
+            menuIva.Size = new Size(290, 26);
+            menuIva.Text = "Liquidación de &IVA";
+            menuIva.Click += menuIva_Click;
             menuVer.DropDownItems.AddRange(new ToolStripItem[] { menuDashboard });
             menuVer.Name = "menuVer";
             menuVer.Size = new Size(45, 24);
@@ -170,6 +185,9 @@
         private ToolStripMenuItem menuBalanceComprobacion;
         private ToolStripMenuItem menuBalanceGeneral;
         private ToolStripMenuItem menuEstadoResultados;
+        private ToolStripMenuItem menuHerramientas;
+        private ToolStripMenuItem menuSaludFinanciera;
+        private ToolStripMenuItem menuIva;
         private ToolStripMenuItem menuVer;
         private ToolStripMenuItem menuDashboard;
         private ToolStripMenuItem menuSeguridad;

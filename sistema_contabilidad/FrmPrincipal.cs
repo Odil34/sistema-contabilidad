@@ -54,6 +54,10 @@ namespace sistema_contabilidad
 
         private void menuEstadoResultados_Click(object sender, EventArgs e) => AbrirHijo<FrmEstadoResultados>();
 
+        private void menuSaludFinanciera_Click(object sender, EventArgs e) => AbrirHijo<FrmSaludFinanciera>();
+
+        private void menuIva_Click(object sender, EventArgs e) => AbrirHijo<FrmLiquidacionIva>();
+
         private void menuDashboard_Click(object sender, EventArgs e) => AbrirHijo<FrmDashboard>();
 
         private void menuUsuarios_Click(object sender, EventArgs e)
