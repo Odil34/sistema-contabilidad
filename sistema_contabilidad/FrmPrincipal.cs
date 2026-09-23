@@ -40,6 +40,12 @@ namespace sistema_contabilidad
 
         private void menuLibroMayor_Click(object sender, EventArgs e) => AbrirHijo<FrmLibroMayor>();
 
+        private void menuBalanceComprobacion_Click(object sender, EventArgs e) => AbrirHijo<FrmBalanceComprobacion>();
+
+        private void menuBalanceGeneral_Click(object sender, EventArgs e) => AbrirHijo<FrmBalanceGeneral>();
+
+        private void menuEstadoResultados_Click(object sender, EventArgs e) => AbrirHijo<FrmEstadoResultados>();
+
         private void menuDashboard_Click(object sender, EventArgs e) => AbrirHijo<FrmDashboard>();
 
         private void menuAcercaDe_Click(object sender, EventArgs e)
