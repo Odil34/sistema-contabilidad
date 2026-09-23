@@ -7,6 +7,7 @@ namespace sistema_contabilidad.Formularios
     public partial class FrmLibroMayor : Form
     {
         private readonly ReporteDAL _reporteDAL = new ReporteDAL();
+        private DataTable _tablaMayor;
 
         public FrmLibroMayor()
         {
@@ -34,12 +35,25 @@ namespace sistema_contabilidad.Formularios
             foreach (var s in saldos)
                 tabla.Rows.Add(s.Codigo, s.Nombre, s.TotalDebe, s.TotalHaber, s.Saldo, s.TipoSaldo);
 
+            _tablaMayor = tabla;
             dgvMayor.DataSource = tabla;
             FormatearGrilla(dgvMayor);
             dgvMayor.Columns["Cuenta"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            AplicarFiltro();
 
             if (saldos.Count == 0)
                 lblMovTitulo.Text = "No hay movimientos registrados";
+        }
+
+        private void txtBuscar_TextChanged(object sender, EventArgs e) => AplicarFiltro();
+
+        private void AplicarFiltro()
+        {
+            if (_tablaMayor == null) return;
+            string texto = txtBuscar.Text.Replace("'", "''").Trim();
+            _tablaMayor.DefaultView.RowFilter = string.IsNullOrEmpty(texto)
+                ? ""
+                : $"[Código] LIKE '%{texto}%' OR [Cuenta] LIKE '%{texto}%'";
         }
 
         private void dgvMayor_SelectionChanged(object sender, EventArgs e)

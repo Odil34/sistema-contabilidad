@@ -23,6 +23,8 @@
             lblHasta = new Label();
             dtpHasta = new DateTimePicker();
             btnActualizar = new Button();
+            lblBuscar = new Label();
+            txtBuscar = new TextBox();
             splitContainer = new SplitContainer();
             dgvMayor = new DataGridView();
             lblMovTitulo = new Label();
@@ -54,6 +56,8 @@
             panelControles.Controls.Add(lblHasta);
             panelControles.Controls.Add(dtpHasta);
             panelControles.Controls.Add(btnActualizar);
+            panelControles.Controls.Add(lblBuscar);
+            panelControles.Controls.Add(txtBuscar);
             panelControles.Dock = DockStyle.Top;
             panelControles.Location = new Point(0, 55);
             panelControles.Name = "panelControles";
@@ -81,6 +85,17 @@
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = false;
             btnActualizar.Click += btnActualizar_Click;
+            lblBuscar.AutoSize = true;
+            lblBuscar.Location = new Point(430, 14);
+            lblBuscar.Name = "lblBuscar";
+            lblBuscar.Size = new Size(60, 20);
+            lblBuscar.TabIndex = 3;
+            lblBuscar.Text = "Buscar:";
+            txtBuscar.Location = new Point(496, 10);
+            txtBuscar.Name = "txtBuscar";
+            txtBuscar.Size = new Size(300, 27);
+            txtBuscar.TabIndex = 4;
+            txtBuscar.TextChanged += txtBuscar_TextChanged;
             splitContainer.Dock = DockStyle.Fill;
             splitContainer.Location = new Point(0, 103);
             splitContainer.Name = "splitContainer";
@@ -157,6 +172,8 @@
         private Label lblHasta;
         private DateTimePicker dtpHasta;
         private Button btnActualizar;
+        private Label lblBuscar;
+        private TextBox txtBuscar;
         private SplitContainer splitContainer;
         private DataGridView dgvMayor;
         private Label lblMovTitulo;
