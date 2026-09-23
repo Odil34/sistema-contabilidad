@@ -11,27 +11,31 @@ namespace sistema_contabilidad.Datos
             var lista = new List<SaldoCuenta>();
             using var con = ConexionBD.ObtenerConexion();
             using var cmd = new SqlCommand(
-                @"SELECT c.Codigo, c.Nombre, c.Naturaleza, c.Tipo,
+                @"SELECT c.Codigo, c.Nombre, c.Naturaleza, c.Tipo, c.CodigoPadre, ISNULL(p.Nombre, ''),
                          ISNULL(SUM(d.Debe), 0)  AS TotalDebe,
                          ISNULL(SUM(d.Haber), 0) AS TotalHaber
                   FROM dbo.Cuentas c
+                  LEFT JOIN dbo.Cuentas p ON p.Codigo = c.CodigoPadre
                   LEFT JOIN dbo.AsientoDetalle d ON d.CodigoCuenta = c.Codigo
                   LEFT JOIN dbo.Asientos a ON a.IdAsiento = d.IdAsiento AND a.Fecha <= @hasta
                   WHERE c.EsDetalle = 1
-                  GROUP BY c.Codigo, c.Nombre, c.Naturaleza, c.Tipo
+                  GROUP BY c.Codigo, c.Nombre, c.Naturaleza, c.Tipo, c.CodigoPadre, p.Nombre
                   ORDER BY c.Codigo", con);
             cmd.Parameters.AddWithValue("@hasta", hasta.Date);
             using var dr = cmd.ExecuteReader();
             while (dr.Read())
             {
+                string padreNom = dr.GetString(5);
                 var s = new SaldoCuenta
                 {
                     Codigo = dr.GetString(0),
                     Nombre = dr.GetString(1),
                     Naturaleza = dr.GetString(2),
                     Tipo = dr.GetInt32(3),
-                    TotalDebe = dr.GetDecimal(4),
-                    TotalHaber = dr.GetDecimal(5)
+                    CodigoPadre = dr.IsDBNull(4) ? null : dr.GetString(4),
+                    NombrePadre = string.IsNullOrEmpty(padreNom) ? null : padreNom,
+                    TotalDebe = dr.GetDecimal(6),
+                    TotalHaber = dr.GetDecimal(7)
                 };
                 if (soloConMovimiento && s.TotalDebe == 0 && s.TotalHaber == 0)
                     continue;

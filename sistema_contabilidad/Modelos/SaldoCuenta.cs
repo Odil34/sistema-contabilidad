@@ -4,6 +4,8 @@ namespace sistema_contabilidad.Modelos
     {
         public string Codigo { get; set; }
         public string Nombre { get; set; }
+        public string CodigoPadre { get; set; }
+        public string NombrePadre { get; set; }
         public string Naturaleza { get; set; }
         public int Tipo { get; set; }
         public decimal TotalDebe { get; set; }
@@ -26,5 +28,8 @@ namespace sistema_contabilidad.Modelos
 
         public decimal SaldoDeudor => (TotalDebe - TotalHaber) > 0 ? TotalDebe - TotalHaber : 0;
         public decimal SaldoAcreedor => (TotalHaber - TotalDebe) > 0 ? TotalHaber - TotalDebe : 0;
+
+        public string CodigoGrupo => string.IsNullOrEmpty(CodigoPadre) ? Codigo : CodigoPadre;
+        public string NombreGrupo => string.IsNullOrEmpty(NombrePadre) ? Nombre : NombrePadre;
     }
 }
