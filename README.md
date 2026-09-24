@@ -5,6 +5,7 @@ Sistema de contabilidad desarrollado en C# con Windows Forms para gestionar oper
 ## Descripción
 
 Este proyecto permite llevar el control financiero de una organización mediante una interfaz desktop en Windows. La aplicación conecta a una base de datos SQL Server y automatiza la creación inicial de la base de datos y la estructura necesaria para operar.
+link del repositorio : https://github.com/Odil34/sistema-contabilidad
 
 Incluye módulos para:
 
