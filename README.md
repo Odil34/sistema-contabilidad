@@ -147,6 +147,7 @@ Este repositorio no incluye un archivo de licencia explícito en el proyecto det
 ## Autor
 
 * Odil34
+* bryanteta entre otros
 
 ## Estado del proyecto
 
