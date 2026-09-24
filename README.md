@@ -151,4 +151,4 @@ Este repositorio no incluye un archivo de licencia explícito en el proyecto det
 
 ## Estado del proyecto
 
-Este repositorio parece ser un sistema desktop de contabilidad funcional con varias pantallas de gestión financiera, listo para ser ejecutado en un entorno de desarrollo Windows.
+Este repositorio es un sistema desktop de contabilidad funcional con varias pantallas de gestión financiera, listo para ser ejecutado en un entorno de desarrollo Windows.
